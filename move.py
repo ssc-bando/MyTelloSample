@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import socket
 
 TELLO_IP      = '192.168.10.1'
@@ -40,7 +41,7 @@ class TelloCommand:
         print(">> [%s]" % cmd)
         self._cmd.send(cmd)
         ret = self._cmd.recv()
-        print("<< [%s]" % ret)
+        print("<< [%s]" % ret.strip())
         return ret
 
     def status(self):
@@ -78,14 +79,21 @@ class TelloControl:
         return True
 
     def command(self, cmd):
-        self._cmd.command(cmd)
+        return self._cmd.command(cmd)
+
+    def status(self):
+        t = self._cmd.status()
+        return t
 
 
 def main():
     ctrl = TelloControl()
     if ctrl.initialize() is False:
         exit()
+    #ctrl.status()
     ctrl.command("takeoff")
+    #ctrl.command("cw 180")
+    #ctrl.command("ccw 180")
     ctrl.command("land")
     print("Drone Control Program : Start")
 
